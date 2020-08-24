@@ -1,3 +1,4 @@
+#Created by Phoneman btw
 import random
 def simHit(accuracy, maxHit):
 	accuracy_rand = random.randint(0,10000)
