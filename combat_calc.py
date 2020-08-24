@@ -1,5 +1,20 @@
 #Created by @Phoneman_btw
 import random
+
+class NPC:
+	"""docstring for NPC"""
+	def __init__(self, hp, defence, mage, stab_def, slash_def, crush_def, mage_def, range_def):
+		self.hp = hp
+		self.defence = defence
+		self.mage = mage
+		self.stab_def = stab_def
+		self.slash_def = slash_def
+		self.crush_def = crush_def
+		self.mage_def = mage_def
+		self.range_def = range_def
+	#Add regen when I can be asked
+
+
 def simHit(accuracy, maxHit):
 	accuracy_rand = random.randint(0,10000)
 	hit = random.randint(0, maxHit)
