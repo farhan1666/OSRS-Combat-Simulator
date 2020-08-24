@@ -1,3 +1,4 @@
+#Created by @Phoneman_btw
 import random
 def simHit(accuracy, maxHit):
 	accuracy_rand = random.randint(0,10000)
@@ -83,11 +84,7 @@ def calcDefenceRoll(effective_level, equipment_bonus):
 	max_roll = effective_level * (equipment_bonus + 64)
 	return max_roll
 
-def calcHitChance(max_attack_roll, max_defence_roll, brimstone = False):
-	if brimstone:
-		brim_proc = random.randint(1,4)
-		if brim_proc == 1:
-			max_defence_roll = multiplyDown(max_defence_roll, 0.9)
+def calcHitChance(max_attack_roll, max_defence_roll):
 	if max_attack_roll > max_defence_roll:
 		hit_chance = 1 - (max_defence_roll + 2) / (2 * (max_attack_roll + 1))
 	else:
@@ -127,10 +124,10 @@ def main():
 	def_equipment_bonus = 50
 	attack_roll = calcAttackRoll(effective_level, equipment_bonus)
 	defence_roll = calcDefenceRoll(def_effective_level, def_equipment_bonus)
-	# accuracy = calcHitChance(attack_roll, defence_roll, True)
+	# accuracy = calcHitChance(attack_roll, defence_roll)
 	hits = []
 	for i in range(100000):
-		hits.append(calcHitChance(attack_roll, defence_roll, True))
+		hits.append(calcHitChance(attack_roll, defence_roll))
 	print(sum(hits) / len(hits))
 
 if __name__ == '__main__':
