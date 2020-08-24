@@ -1,4 +1,3 @@
-#Created by Phoneman btw
 import random
 def simHit(accuracy, maxHit):
 	accuracy_rand = random.randint(0,10000)
@@ -78,15 +77,17 @@ def calcAttackRoll(effective_level, equipment_bonus, special_attack = "", mage_l
 		max_roll = multiplyDown(max_roll, 2.00)
 	elif special_attack == "Twisted bow":
 		max_roll = multiplyDown(max_roll, min((0.399 + 0.0063 * min((350, mage_level)) - 0.000009 * min((350, mage_level))**2), 1.4)) #Bow accuracy capped at 1.4	
-	print("Max Attack roll:", max_roll)
 	return max_roll
 
 def calcDefenceRoll(effective_level, equipment_bonus):
 	max_roll = effective_level * (equipment_bonus + 64)
-	print("Max Defence roll:", max_roll)
 	return max_roll
 
-def calcHitChance(max_attack_roll, max_defence_roll):
+def calcHitChance(max_attack_roll, max_defence_roll, brimstone = False):
+	if brimstone:
+		brim_proc = random.randint(1,4)
+		if brim_proc == 1:
+			max_defence_roll = multiplyDown(max_defence_roll, 0.9)
 	if max_attack_roll > max_defence_roll:
 		hit_chance = 1 - (max_defence_roll + 2) / (2 * (max_attack_roll + 1))
 	else:
@@ -119,9 +120,18 @@ def getEffectiveLevel(visible_level, style = "Controlled", combat = "", prayer =
 
 
 def main():
-	max_hit = calcMageMaxHit("Sang", 99, 0, False, False, False, True)
-	print(max_hit)
-	accuracy = calcHitChance(calcAttackRoll(getEffectiveLevel(99, "Accurate", "Magic"), 33), calcDefenceRoll(getEffectiveLevel(250), 50))
-	print(accuracy)
+	max_hit = calcMageMaxHit("Sang", 99)
+	effective_level = getEffectiveLevel(99, "Accurate", "Magic")
+	def_effective_level = getEffectiveLevel(250)
+	equipment_bonus = 31
+	def_equipment_bonus = 50
+	attack_roll = calcAttackRoll(effective_level, equipment_bonus)
+	defence_roll = calcDefenceRoll(def_effective_level, def_equipment_bonus)
+	# accuracy = calcHitChance(attack_roll, defence_roll, True)
+	hits = []
+	for i in range(100000):
+		hits.append(calcHitChance(attack_roll, defence_roll, True))
+	print(sum(hits) / len(hits))
+
 if __name__ == '__main__':
 	main()
