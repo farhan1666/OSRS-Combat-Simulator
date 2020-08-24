@@ -78,10 +78,12 @@ def calcAttackRoll(effective_level, equipment_bonus, special_attack = "", mage_l
 		max_roll = multiplyDown(max_roll, 2.00)
 	elif special_attack == "Twisted bow":
 		max_roll = multiplyDown(max_roll, min((0.399 + 0.0063 * min((350, mage_level)) - 0.000009 * min((350, mage_level))**2), 1.4)) #Bow accuracy capped at 1.4	
+	print("Max Attack roll:", max_roll)
 	return max_roll
 
 def calcDefenceRoll(effective_level, equipment_bonus):
 	max_roll = effective_level * (equipment_bonus + 64)
+	print("Max Defence roll:", max_roll)
 	return max_roll
 
 def calcHitChance(max_attack_roll, max_defence_roll):
@@ -129,6 +131,5 @@ def main():
 	for i in range(100000):
 		hits.append(calcHitChance(attack_roll, defence_roll))
 	print(sum(hits) / len(hits))
-
 if __name__ == '__main__':
 	main()
