@@ -14,6 +14,15 @@ class NPC:
 		self.range_def = range_def
 	#Add regen when I can be asked
 
+	def lower_hp(self, damage):
+		self.hp -= damage
+		if self.hp < 0:
+			self.hp = 0
+
+	def lower_def(self, amount):
+		pass
+	
+		
 
 def simHit(accuracy, maxHit):
 	accuracy_rand = random.randint(0,10000)
@@ -46,7 +55,7 @@ def calcMaxHit(effective_strength, equipment_strength, set_bonus = "", special_a
 	elif special_attack == "Twisted bow":
 		maxHit = multiplyDown(maxHit, (0.5386 + 0.0087 * mage_level - 0.000009 * mage_level**2))
 	if set_bonus == "Inquisitor":
-		maxHit = multiplyDown(maxHit, 1.025)
+		maxHit = multiplyDown(maxHit, 1.025) #This is wrong because spag code lmao
 	return maxHit
 
 def getEffectiveStrength(combat, visible_level, style, prayer = "none", set_bonus = "none"):
@@ -74,8 +83,8 @@ def getEffectiveStrength(combat, visible_level, style, prayer = "none", set_bonu
 
 #This section is for magic max hit
 
-def calcMageMaxHit(spell = "Sang", visible_mage = 120, anc_pieces = 3, occult = True, torm = True,  harm = False, tome = True):
-	magic_boost = anc_pieces * 0.02 + occult * 0.10 + torm * 0.05 + harm * 0.15
+def calcMageMaxHit(spell = "Sang", visible_mage = 120, magic_boost = 0, tome = True):
+	magic_boost /= 100
 	if spell == "Sang":
 		maxHit = int(visible_mage / 3) - 1
 	elif spell == "Fire Surge":
@@ -92,7 +101,9 @@ def calcAttackRoll(effective_level, equipment_bonus, special_attack = "", mage_l
 	if special_attack == "Bandos Godsword":
 		max_roll = multiplyDown(max_roll, 2.00)
 	elif special_attack == "Twisted bow":
-		max_roll = multiplyDown(max_roll, min((0.399 + 0.0063 * min((350, mage_level)) - 0.000009 * min((350, mage_level))**2), 1.4)) #Bow accuracy capped at 1.4	
+		max_roll = multiplyDown(max_roll, min((0.399 + 0.0063 * min((350, mage_level)) - 0.000009 * min((350, mage_level))**2), 1.4)) #Bow accuracy capped at 1.4
+	elif special_attack == "Inquisitor":
+		max_roll = multiplyDown(max_roll, 1.025)
 	return max_roll
 
 def calcDefenceRoll(effective_level, equipment_bonus):
