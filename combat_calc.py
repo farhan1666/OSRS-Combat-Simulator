@@ -20,7 +20,9 @@ class NPC:
 			self.hp = 0
 
 	def lower_def(self, amount):
-		pass
+		self.defence -= amount
+		if self.defence < 0:
+			self.defence = 0
 	
 		
 
@@ -48,14 +50,14 @@ def multiplyDown(number, multiplier): #Increases the number by multiplier then f
 
 def calcMaxHit(effective_strength, equipment_strength, set_bonus = "", special_attack = "", mage_level = 0):
 	maxHit = int(0.5 + effective_strength * (equipment_strength+64)/640)
+	if set_bonus == "Inquisitor":
+		maxHit = multiplyDown(maxHit, 1.025)
 	if special_attack == "Bandos godsword":
 		maxHit = multiplyDown(maxHit, 1.10)
 	elif special_attack == "Dragon warhammer":
 		maxHit = multiplyDown(maxHit, 1.50)
 	elif special_attack == "Twisted bow":
 		maxHit = multiplyDown(maxHit, (0.5386 + 0.0087 * mage_level - 0.000009 * mage_level**2))
-	if set_bonus == "Inquisitor":
-		maxHit = multiplyDown(maxHit, 1.025) #This is wrong because spag code lmao
 	return maxHit
 
 def getEffectiveStrength(combat, visible_level, style, prayer = "none", set_bonus = "none"):
@@ -96,14 +98,14 @@ def calcMageMaxHit(spell = "Sang", visible_mage = 120, magic_boost = 0, tome = T
 
 #This section is for calculating accuracy
 
-def calcAttackRoll(effective_level, equipment_bonus, special_attack = "", mage_level = 0): #Take the corresponding stab, slash, crush, ranged or magic attack bonus from the equipment stats interface and let this equal equipment_bonus
+def calcAttackRoll(effective_level, equipment_bonus, set_bonus = "", special_attack = "", mage_level = 0): #Take the corresponding stab, slash, crush, ranged or magic attack bonus from the equipment stats interface and let this equal equipment_bonus
 	max_roll = effective_level * (equipment_bonus + 64)
-	if special_attack == "Bandos Godsword":
+	if set_bonus == "Inquisitor":
+		max_roll = multiplyDown(max_roll, 1.025)
+	if special_attack == "Bandos godsword":
 		max_roll = multiplyDown(max_roll, 2.00)
 	elif special_attack == "Twisted bow":
 		max_roll = multiplyDown(max_roll, min((0.399 + 0.0063 * min((350, mage_level)) - 0.000009 * min((350, mage_level))**2), 1.4)) #Bow accuracy capped at 1.4
-	elif special_attack == "Inquisitor":
-		max_roll = multiplyDown(max_roll, 1.025)
 	return max_roll
 
 def calcDefenceRoll(effective_level, equipment_bonus):
