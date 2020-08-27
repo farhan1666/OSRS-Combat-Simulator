@@ -26,10 +26,10 @@ def inqHammer(NPC):
     att_effective_level = getEffectiveLevel(120, "Accurate", "Melee", "Piety")
     def_effective_level = getEffectiveLevel(NPC.defence)
     attack_roll = calcAttackRoll(att_effective_level, 192, "Inquisitor")
-    defence_roll = calcDefenceRoll(def_effective_level, 50)
+    defence_roll = calcDefenceRoll(def_effective_level, NPC.crush_def)
     accuracy = calcHitChance(attack_roll, defence_roll)
-    effective_strength = getEffectiveStrength("Melee", 118, "Accurate", "Piety")
-    max_hit = calcMaxHit(effective_strength, 183, "Inquisitor", "Dragon warhammer")
+    effective_strength = getEffectiveStrength("Melee", 120, "Accurate", "Piety")
+    max_hit = calcMaxHit(effective_strength, 148, "Inquisitor", "Dragon warhammer")
     return accuracy, max_hit
 
 
@@ -52,7 +52,7 @@ def main():
     olm_melee_hand = NPC(2400, 185, 185, 50, 50, 50, 200, 200)
     defences = []
 
-    for i in range(1000000):
+    for i in range(40000):
         olm_melee_hand = NPC(2400, 185, 185, 50, 50, 50, 200, 200)
         accuracy, max_hit = inqHammer(olm_melee_hand)
 
@@ -84,12 +84,12 @@ def main():
         defences.append(olm_melee_hand.defence)
 
     print("Mode:", mode(defences))
-    print("Median:", median(list(filter(lambda a: a != 0, defences))))
+    print("Median:", median(defences))
     print("Mean", mean(defences))
     zero_def_rate = round((defences.count(0) / len(defences) * 100), 2)
-    print("amount of times at 0 defence: "+str(defences.count(0)))
+    print("Amount of times at 0 defence: " + str(defences.count(0)))
 
-    print("That's "+str(zero_def_rate)+"% of the time, or 1/"+str(round((defences.count(0) /  len(defences)) ** -1, 2)))
+    print("That's " + str(zero_def_rate) + "% of the time, or 1/" + str(round((defences.count(0) /  len(defences)) ** -1, 2)))
 
 
 
